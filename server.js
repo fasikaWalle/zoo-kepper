@@ -57,7 +57,9 @@ if(query.personalityTraits){
   if (query.species) {
     filteredResults = filteredResults.filter(animal => animal.species === query.species);
   }
-  
+  if (query.name) {
+    filteredResults = filteredResults.filter(animal => animal.name === query.name);
+  }
   
   
   return filteredResults;
