@@ -4,6 +4,21 @@ const {animals}=require('./data/animals.json')
 
 const app = express()
 
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => {
+  console.log(`API server now on port ${PORT}`)
+})
+
+app.get('/api/animals/:id', (req, res) => {
+  const result = findById(req.params.id, animals);
+  if(result){
+    res.json(result);
+  }else{
+    res.send(404)
+  }
+   
+});
+
 
 app.get('/api/animals', (req, res) => {
   let results=animals
@@ -11,13 +26,14 @@ app.get('/api/animals', (req, res) => {
   if(req.query){
   results = filterByQuery(req.query, results);
   }
-  res.json(results)
-})
-const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => {
-  console.log(`API server now on port 3001!`)
+  res.json(404)
 })
 
+
+function findById(id,animalArray){
+    const result=animalArray.filter(animal=>animal.id===id)[0];
+    return result
+}
 
 function filterByQuery(query, animalsArray) {
   let filteredResults = animalsArray;
@@ -44,9 +60,7 @@ if(query.personalityTraits){
   if (query.name) {
     filteredResults = filteredResults.filter(animal => animal.name === query.name);
   }
-  if(query.id){
-    filteredResults=filteredResults.filter(animal=>animal.id===query.id);
-  }
+  
   
   return filteredResults;
 }
